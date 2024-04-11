@@ -20,6 +20,8 @@ webpage = urlopen(req).read()
 mapping_data = json.loads(webpage)
 item_info = mapping_data
 
+
+
 def find_price(id):
     high = prices[str(id)]["high"]
     low = prices[str(id)]["low"]
@@ -31,10 +33,19 @@ def map_item_id(name):
         if item["name"] == str(name.capitalize()):
             return item["id"]
 
-def query_item(name):
-    item_id = map_item_id(name)
-    price = find_price(item_id)
-    return price
+def query_item(item):
+    try:
+        item_id = map_item_id(item)
+        if item_id == None:
+            return f"Item not found: **{item}**"
+        price = int(find_price(item_id))
+        return f'The average price of **{item}** is: **{price:,} gp**'
+    except Exception as e:
+        return e 
 
+def get_response(user_input:str) ->str:
+    lowered: str = user_input.lower()
+    return(query_item(lowered))
 
-print(query_item("BLood moon tassets"))
+# print(query_item("abyssal whip"))
+# print(query_item("abyssal whp"))
